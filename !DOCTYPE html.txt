@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ONGC AC PORTAL</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      :root { --primary-red: #d32f2f; --primary-blue: #1976d2; --primary-green: #2e7d32; --bg-color: #f2f4f7; --card-bg: #ffffff; --text-main: #1d1d1f; --text-muted: #5f6368; --border-color: #e5e7eb; }
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+      body { display: flex; flex-direction: column; align-items: center; min-height: 100dvh; padding-top: 60px; box-sizing: border-box; overflow-x: hidden; }
+      
+      .header { background: linear-gradient(135deg, var(--primary-red), #e53935); color: white; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; position: fixed; top: 0; left: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); letter-spacing: 0.5px;}
+      .admin-icon { position: absolute; right: 16px; cursor: pointer; color: rgba(255,255,255,0.8); transition: 0.2s; font-size: 24px; }
+      .admin-icon:hover { color: white; transform: scale(1.1); }
+      .container { background: var(--card-bg); padding: 18px 16px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02); width: 94%; max-width: 420px; text-align: center; box-sizing: border-box; margin-top: 12px; flex-shrink: 0; display: flex; flex-direction: column; }
+      .asset-id { font-size: 32px; font-weight: 800; color: var(--text-main); margin: 0 0 10px 0; letter-spacing: -0.5px; }
+      .status-banner { padding: 8px; border-radius: 8px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; flex-direction: column;}
+      .info-card { background: white; border-radius: 12px; margin-bottom: 16px; box-shadow: inset 0 0 0 1px var(--border-color); text-align: left; overflow: hidden; }
+      .info-row { padding: 10px 14px; border-bottom: 1px solid #f0f2f5; } .info-row:last-child { border-bottom: none; } .info-row.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .i-lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px; } .i-val { font-size: 14px; color: var(--text-main); font-weight: 700; }
+      
+      .btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 12px; margin: 6px 0; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; color: white; letter-spacing: 0.3px; transition: transform 0.1s; } .btn:active { transform: scale(0.97); } .btn .material-symbols-outlined { font-size: 20px; }
+      .btn-blue { background: var(--primary-blue); } .btn-red { background: var(--primary-red); } .btn-green { background: var(--primary-green); } .btn-dark { background: #202124; }
+      .btn-text { background: none; border: none; color: var(--primary-blue); font-weight: 600; cursor: pointer; margin-top: 8px; font-size: 13px; padding: 8px; } .btn-disabled { background: #e0e0e0 !important; color: #9e9e9e !important; cursor: not-allowed !important; pointer-events: none; }
+      
+      .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); z-index: 200; justify-content: center; align-items: center; padding: 16px; box-sizing: border-box; }
+      .modal-box { background: white; padding: 20px; border-radius: 20px; width: 100%; max-width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); box-sizing: border-box; max-height: 88vh; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; }
+      input[type="text"], input[type="password"], textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border-color); border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 14px; margin-top: 4px; transition: border-color 0.2s; background: #fafafa; } input:focus, textarea:focus { outline: none; border-color: var(--primary-blue); background: white; }
+      
+      .history-list { background: #fafafa; border: 1px solid var(--border-color); border-radius: 10px; padding: 0; margin-bottom: 16px; overflow: hidden; } .h-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid #eaeaea; } .h-row:last-child { border-bottom: none; }
+      .h-label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin: 0; } .h-date { font-size: 13px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: white; border: 1px solid var(--border-color); margin: 0; }
+      .text-green { color: var(--primary-green); border-color: #c8e6c9; } .text-orange { color: #e65100; border-color: #ffe0b2; } .text-red { color: var(--primary-red); border-color: #ffcdd2; }
+      
+      .segmented-control { display: flex; background: #eef0f2; border-radius: 10px; padding: 4px; margin-bottom: 16px; } .seg-btn { flex: 1; padding: 8px 0; text-align: center; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: 0.2s; } .seg-btn.active { background: white; color: var(--primary-blue); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .ticket-card { background: #fff; border: 1px solid var(--border-color); border-left: 4px solid var(--primary-red); border-radius: 8px; padding: 12px; margin-bottom: 10px; } .chart-container { background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); } .chart-title { font-size: 12px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; text-align: center; letter-spacing: 0.5px;}
+      .stat-hero { background: var(--primary-blue); color: white; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 16px; } .stat-hero-num { font-size: 36px; font-weight: 800; margin: 0; line-height: 1; } .stat-hero-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; opacity: 0.9; margin-top: 4px; }
+      
+      .chat-box { background: #f0f2f5; width: 100%; max-width: 400px; display: flex; flex-direction: column; height: 80vh; border-radius: 16px; overflow: hidden; } #chat-history { flex-grow: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; } .chat-bubble { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.4; } .chat-user { background: var(--primary-blue); color: white; align-self: flex-end; border-bottom-right-radius: 4px; } .chat-ai { background: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+      
+      #loading-overlay { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 30px 0; } .spinner { border: 3px solid rgba(0, 0, 0, 0.1); width: 32px; height: 32px; border-radius: 50%; border-left-color: var(--primary-blue); animation: spin 1s linear infinite; margin-bottom: 12px; } @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } .success-icon { font-size: 64px; color: var(--primary-green); margin-bottom: 10px; }
+      .footer { margin-top: auto; padding: 16px; font-size: 10px; color: #9aa0a6; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; text-align: center; width: 100%; box-sizing: border-box; }
+      
+      /* OFFLINE SYNC BADGE */
+      .sync-badge { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #f57c00; color: white; padding: 10px 18px; border-radius: 24px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; transition: background-color 0.3s; cursor: pointer;}
+      .sync-badge.online-mode { background: #2e7d32; display: none; } .sync-badge.syncing { background: #1976d2; } .spin-icon { animation: spin 1s linear infinite; }
+    </style>
+  </head>
+  
+  <body>
+    <div class="header">
+      ONGC AC PORTAL
+      <span class="material-symbols-outlined admin-icon" onclick="askForPin('Admin')">admin_panel_settings</span>
+    </div>
+
+    <div id="scan-step" class="container">
+      <h3 style="margin: 0 0 16px 0; font-size: 18px;">Identify Asset</h3>
+      <input list="ac-list" id="ac-selector" placeholder="Type TAG ID (e.g. AC001)" onchange="if(this.value) processAsset(this.value)">
+      <datalist id="ac-list">
+        </datalist>
+      <div id="reader" style="border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); margin-top: 12px;"></div>
+    </div>
+
+    <div id="action-step" class="container" style="display:none;">
+      <div style="font-size:10px; color:var(--text-muted); font-weight:700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Unit Identified</div>
+      <div class="asset-id" id="asset-id-header"></div>
+      
+      <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div style="color: var(--text-muted); font-weight: 600; font-size: 13px;">Fetching Details...</div>
+      </div>
+
+      <div id="asset-content" style="display: none; flex-grow: 1;">
+        <div id="status-banner" class="status-banner"></div>
+
+        <div class="info-card">
+          <div class="info-row grid-2">
+            <div><div class="i-lbl">Make</div><div class="i-val" id="val-make">-</div></div>
+            <div><div class="i-lbl">Capacity</div><div class="i-val" id="val-cap">-</div></div>
+          </div>
+          <div class="info-row">
+            <div class="i-lbl">Area</div><div class="i-val" id="val-area">-</div>
+          </div>
+          <div class="info-row">
+            <div class="i-lbl">Location</div><div class="i-val" id="val-loc">-</div>
+          </div>
+        </div>
+
+        <button class="btn btn-blue" onclick="showHistory()"><span class="material-symbols-outlined">history</span> VIEW HISTORY</button>
+        <button class="btn btn-green" onclick="askForPin('PM')"><span class="material-symbols-outlined">check_box</span> LOG SERVICE</button>
+        <button id="btn-breakdown" class="btn btn-red" onclick="askForPin('Breakdown')"><span class="material-symbols-outlined">warning</span> REPORT FAULT</button>
+      </div>
+      
+      <button class="btn-text" onclick="location.reload()">Clear Search</button>
+    </div>
+
+    <div class="footer">DEVELOPED BY FMP ELECTRICAL</div>
+
+    <div id="admin-overlay" class="overlay">
+      <div class="modal-box" style="width: 100%; max-width: 500px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 12px;">
+          <h2 style="color:var(--primary-red); margin:0; font-size:18px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined">dashboard</span> Admin Portal
+          </h2>
+          <span class="material-symbols-outlined" style="cursor:pointer; color:var(--text-muted);" onclick="document.getElementById('admin-overlay').style.display='none'">close</span>
+        </div>
+        
+        <button class="btn btn-dark" style="margin-bottom: 16px;" onclick="document.getElementById('admin-overlay').style.display='none'; document.getElementById('ai-chat-overlay').style.display='flex';">
+          <span class="material-symbols-outlined">smart_toy</span> DATABASE AI
+        </button>
+
+        <div class="segmented-control">
+          <div class="seg-btn active" id="tab-btn-tickets" onclick="switchAdminTab('tickets')">Live Tickets</div>
+          <div class="seg-btn" id="tab-btn-analytics" onclick="switchAdminTab('analytics')">Analytics</div>
+        </div>
+
+        <div id="admin-tab-tickets">
+          <h3 style="font-size: 13px; margin: 0 0 10px 0; color: var(--text-muted);">Site Status: Open Tickets (<span id="open-count">0</span>)</h3>
+          <div id="open-tickets-list" style="text-align:left; background: #fafafa; padding: 12px; border-radius: 10px; border: 1px solid #eee; min-height: 120px;"></div>
+        </div>
+
+        <div id="admin-tab-analytics" style="display:none;">
+          <div id="analytics-loader" style="text-align:center; padding: 20px;"><span class="material-symbols-outlined spin" style="color:var(--primary-blue);">sync</span></div>
+          <div id="analytics-content" style="display:none;">
+            <div class="stat-hero">
+              <p class="stat-hero-num" id="stat-total-ac">0</p>
+              <p class="stat-hero-lbl">Total Registered ACs</p>
+            </div>
+            <div class="chart-container"><div class="chart-title">Distribution by Area</div><canvas id="chartArea" height="200"></canvas></div>
+            <div class="chart-container"><div class="chart-title">Distribution by Make</div><canvas id="chartMake" height="200"></canvas></div>
+            <div class="chart-container"><div class="chart-title">Distribution by Installation</div><canvas id="chartInst" height="250"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="report-modal" class="overlay"><div class="modal-box">
+      <h3 id="modal-title" style="margin-top:0; margin-bottom: 4px; text-align:center; font-size: 18px;"></h3>
+      <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:0; margin-bottom:16px;">Asset: <strong id="modal-asset-id" style="color:black;"></strong></p>
+
+      <div style="margin-bottom:12px; text-align:left;">
+        <label class="i-lbl" id="label-name">Name and CPF No *</label>
+        <input type="text" id="input-name" placeholder="Your answer">
+      </div>
+
+      <div id="section-breakdown" style="display:none; text-align:left; margin-bottom:12px;">
+        <label class="i-lbl">Problem Category *</label>
+        <div style="background:#fafafa; padding:12px; border-radius:10px; margin-top:4px; font-size:13px; line-height:2.2; border: 1px solid var(--border-color);">
+          <label><input type="checkbox" name="prob-cat" value="Not Cooling"> Not Cooling</label><br>
+          <label><input type="checkbox" name="prob-cat" value="Low Cooling"> Low Cooling</label><br>
+          <label><input type="checkbox" name="prob-cat" value="Compressor Issue"> Compressor Not Starting</label><br>
+          <label><input type="checkbox" name="prob-cat" value="Water Leakage"> Water Leakage</label><br>
+          <label><input type="checkbox" name="prob-cat" value="Electrical Fault"> Electrical Fault</label>
+        </div>
+      </div>
+
+      <div id="section-tech" style="display:none; text-align:left; margin-bottom:12px;">
+        <label class="i-lbl">Job Type *</label>
+        <div style="margin:4px 0 12px 0; font-size:13px; background:#fafafa; padding:10px 12px; border-radius:10px; border: 1px solid var(--border-color);">
+          <label><input type="radio" name="job-type" value="Breakdown Repair"> Breakdown Repair</label><br>
+          <label style="display:block; margin-top:8px;"><input type="radio" name="job-type" value="Preventive Maintenance"> Preventive Maintenance</label>
+        </div>
+        <label class="i-lbl">Current Status *</label>
+        <div style="margin:4px 0 0 0; font-size:13px; background:#fafafa; padding:10px 12px; border-radius:10px; border: 1px solid var(--border-color);">
+          <label><input type="radio" name="job-status" value="Closed/Working Normally"> Closed/Working Normally</label><br>
+          <label style="display:block; margin-top:8px;"><input type="radio" name="job-status" value="Pending"> Pending</label>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px; text-align:left;">
+        <label class="i-lbl" id="label-desc">Description *</label>
+        <textarea id="modal-desc" placeholder="Details..." rows="2"></textarea>
+      </div>
+
+      <button class="btn btn-blue" id="submit-btn" onclick="submitToDatabase()">SUBMIT</button>
+      <button onclick="closeModal()" class="btn-text" style="width:100%;">Cancel</button>
+    </div></div>
+
+    <div id="success-overlay" class="overlay"><div class="modal-box" style="text-align:center; padding: 30px 20px;">
+      <span class="material-symbols-outlined success-icon">task_alt</span>
+      <h2 id="success-title" style="margin: 0 0 8px 0; color: #202124; font-size: 20px;">Record Updated</h2>
+      <p id="success-desc" style="color: #5f6368; margin: 0 0 20px 0; font-size: 13px;">System has successfully logged your entry.</p>
+      
+      <div id="ticket-display" style="display:none; background:#f4fbf5; padding:12px; border-radius:10px; border:1px solid #c8e6c9; margin-bottom:20px;">
+        <div style="font-size:10px; color:var(--primary-green); font-weight:700; text-transform:uppercase;">Fault Ticket Generated</div>
+        <div id="generated-ticket-id" style="font-size:20px; font-weight:800; color:#202124; margin-top:4px; letter-spacing:0.5px;"></div>
+      </div>
+      <div class="spinner" style="border-width: 2px; margin: 0 auto;"></div>
+    </div></div>
+
+    <div id="pin-overlay" class="overlay"><div class="modal-box" style="text-align:center;">
+      <span class="material-symbols-outlined" style="font-size: 42px; color: var(--primary-blue); margin-bottom: 8px;">lock</span>
+      <h3 style="margin-top:0; font-size: 18px;">Security Check</h3>
+      <input type="password" id="pinInput" placeholder="••••" maxlength="4" style="font-size:24px; text-align:center; letter-spacing:12px; padding: 10px;">
+      <button class="btn btn-blue" style="margin-top:16px;" onclick="verifyAndSubmit()">AUTHORIZE</button>
+      <button onclick="closePin()" class="btn-text" style="padding: 4px; margin-top: 8px;">Cancel</button>
+      <div id="pin-msg" style="color:red; margin-top:8px; font-size: 13px; font-weight:600;"></div>
+    </div></div>
+
+    <div id="history-overlay" class="overlay"><div class="modal-box">
+      <h3 style="text-align:center; color: var(--primary-blue); display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 0 16px 0; font-size: 18px;">
+        <span class="material-symbols-outlined">history</span> Service History
+      </h3>
+      <div class="history-list">
+        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:16px;">build_circle</span> Last PM</p><p class="h-date text-green" id="hist-last-pm">-</p></div>
+        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:16px;">event_upcoming</span> Next Due</p><p class="h-date text-orange" id="hist-next-pm">-</p></div>
+        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:16px;">warning</span> Breakdown</p><p class="h-date text-red" id="hist-bd">-</p></div>
+      </div>
+      <button class="btn btn-blue" onclick="document.getElementById('history-overlay').style.display='none'">CLOSE</button>
+    </div></div>
+
+    <div id="ai-chat-overlay" class="overlay">
+      <div class="chat-box">
+        <div style="background:white; padding:14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee;">
+          <strong style="display:flex; align-items:center; gap:6px; font-size: 14px;"><span class="material-symbols-outlined" style="color:var(--primary-blue); font-size:18px;">smart_toy</span> Database AI</strong>
+          <span style="cursor:pointer;" onclick="document.getElementById('ai-chat-overlay').style.display='none'">✖</span>
+        </div>
+        <div id="chat-history"></div>
+        <div style="background:white; padding:12px; display:flex; gap:8px; border-top:1px solid #eee;">
+          <input type="text" id="chat-input" placeholder="Ask AI..." style="flex:1; margin:0; padding:10px;">
+          <button onclick="sendChatMessage()" style="border:none; background:var(--primary-blue); color:white; padding:0 14px; border-radius:8px; font-weight: 600;">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sync-badge" class="sync-badge" onclick="checkAndSyncOfflineData()">
+      <span class="material-symbols-outlined" id="sync-icon">cloud_off</span>
+      <span id="sync-text">Offline</span>
+    </div>
+
+    <script>
+      // 1. PASTE YOUR NEW GOOGLE APPS SCRIPT WEB APP URL HERE
+      const API_URL = "YOUR_NEW_GAS_WEB_APP_URL_HERE"; 
+
+      // 2. Safely grab URL parameters (Works natively in standard browsers)
+      const urlParams = new URLSearchParams(window.location.search);
+      let scannedAsset = urlParams.get('id') || ""; 
+      let directAdmin = urlParams.get('admin') || "false"; 
+      
+      let currentAction = ""; let scanner; let myChatMemory = "";
+      let chartAreaInstance = null; let chartMakeInstance = null; let chartInstInstance = null;
+
+      // ==========================================
+      // 🚀 THE NEW API BRIDGE (Replaces google.script.run)
+      // ==========================================
+      async function apiCall(action, data = {}) {
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: action, ...data }) 
+          });
+          return await response.json();
+        } catch (error) {
+          console.error("API Error:", error);
+          throw new Error("Network connection failed.");
+        }
+      }
+
+      // ==========================================
+      // STARTUP & OFFLINE CACHE
+      // ==========================================
+      window.onload = function() {
+        updateNetworkStatus();
+        cacheACListIfOnline(); 
+        
+        if (scannedAsset) {
+          processAsset(scannedAsset);
+        } else if (directAdmin === "true") {
+          loadAdminDashboard();
+        } else {
+          scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+          scanner.render(onScanSuccess);
+        }
+      };
+
+      async function cacheACListIfOnline() {
+        if (navigator.onLine) {
+          try {
+            const cache = await apiCall("getFullACListCache");
+            localStorage.setItem("ongc_ac_cache", JSON.stringify(cache));
+            populateDataList(cache); 
+          } catch (e) { console.warn("Failed to update offline cache."); }
+        }
+      }
+      
+      function populateDataList(cache) {
+        const dataList = document.getElementById('ac-list');
+        dataList.innerHTML = '';
+        cache.forEach(ac => {
+            let option = document.createElement('option');
+            option.value = ac.tag;
+            dataList.appendChild(option);
+        });
+      }
+
+      function onScanSuccess(text) { if (text.includes("?id=")) text = text.split("?id=")[1]; if (scanner) scanner.clear(); processAsset(text); }
+
+      // ==========================================
+      // ASSET LOOKUP
+      // ==========================================
+      async function processAsset(id) {
+        scannedAsset = id.trim().toUpperCase();
+        document.getElementById('scan-step').style.display = 'none';
+        document.getElementById('action-step').style.display = 'flex';
+        document.getElementById('asset-id-header').innerText = scannedAsset;
+        document.getElementById('loading-overlay').style.display = 'flex';
+        document.getElementById('asset-content').style.display = 'none';
+
+        if (navigator.onLine) {
+          try {
+            const data = await apiCall("getAssetInfo", { tag: scannedAsset });
+            populateAssetUI(data);
+          } catch (e) { alert("Failed to fetch asset data."); location.reload(); }
+        } else {
+          let cache = JSON.parse(localStorage.getItem("ongc_ac_cache") || "[]");
+          let cachedAsset = cache.find(ac => ac.tag === scannedAsset);
+          
+          if (cachedAsset) {
+            populateAssetUI({
+              found: true,
+              make: cachedAsset.make, capacity: cachedAsset.capacity,
+              area: cachedAsset.area, fullLoc: cachedAsset.fullLoc,
+              lastPMDate: cachedAsset.lastPMDate, nextPMDate: cachedAsset.nextPMDate,
+              hasOpenComplaint: false, lastRepairDate: "Check online"
+            });
+          } else {
+            alert("Asset not found in offline cache. Connect to internet to download full database.");
+            location.reload();
+          }
+        }
+      }
+
+      function populateAssetUI(data) {
+        document.getElementById('loading-overlay').style.display = 'none';
+        if (data.found) {
+          document.getElementById('asset-content').style.display = 'block';
+          document.getElementById('val-make').innerText = data.make;
+          document.getElementById('val-cap').innerText = data.capacity;
+          document.getElementById('val-area').innerText = data.area;
+          document.getElementById('val-loc').innerText = data.fullLoc;
+          document.getElementById('hist-last-pm').innerText = data.lastPMDate;
+          document.getElementById('hist-next-pm').innerText = data.nextPMDate;
+          document.getElementById('hist-bd').innerText = data.lastRepairDate || "No Record";
+          
+          const banner = document.getElementById('status-banner');
+          const bdBtn = document.getElementById('btn-breakdown');
+
+          if (data.hasOpenComplaint) {
+            banner.style.flexDirection = 'column'; banner.style.color = 'var(--primary-red)'; banner.style.backgroundColor = '#fff3f3'; banner.style.border = '1px solid #ffcdd2';
+            banner.innerHTML = `<div style="display:flex; align-items:center; gap:6px;"><span class="material-symbols-outlined" style="font-size:18px;">warning</span><span style="letter-spacing: 0.5px;">FAULTY (OPEN TICKET)</span></div><div style="font-size:11px; font-weight:600; opacity:0.8; margin-top:4px;">${data.openTicketId} | ${data.openTicketDate}</div>`;
+            bdBtn.classList.add('btn-disabled'); bdBtn.innerHTML = '<span class="material-symbols-outlined">block</span> ALREADY REPORTED';
+          } else {
+            banner.style.flexDirection = 'row'; banner.style.color = 'var(--primary-green)'; banner.style.backgroundColor = '#f4fbf5'; banner.style.border = '1px solid #c8e6c9';
+            banner.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px;">check_circle</span> <span style="letter-spacing: 0.5px;">HEALTHY</span>';
+            bdBtn.classList.remove('btn-disabled'); bdBtn.innerHTML = '<span class="material-symbols-outlined">warning</span> REPORT FAULT';
+          }
+        } else { alert("Asset Tag not recognized!"); location.reload(); }
+      }
+
+      // ==========================================
+      // UI MODALS & LOGIC
+      // ==========================================
+      function askForPin(type) { 
+        if (type === 'Breakdown' && document.getElementById('btn-breakdown').classList.contains('btn-disabled')) return;
+        currentAction = type; document.getElementById('pin-overlay').style.display = 'flex'; 
+        setTimeout(() => document.getElementById('pinInput').focus(), 100);
+      }
+
+      async function verifyAndSubmit() {
+        const pin = document.getElementById('pinInput').value;
+        const msg = document.getElementById('pin-msg');
+        msg.innerText = "Verifying...";
+        
+        try {
+          const res = await apiCall("verifyPin", { pin: pin, type: currentAction });
+          if (res.success) {
+            document.getElementById('pin-overlay').style.display = 'none';
+            document.getElementById('pinInput').value = ""; msg.innerText = "";
+            if (currentAction === 'Admin') loadAdminDashboard(); else openReportModal();
+          } else { msg.innerText = "Invalid PIN"; document.getElementById('pinInput').value = ""; }
+        } catch (e) { msg.innerText = "Connection Error"; }
+      }
+
+      function openReportModal() {
+        document.getElementById('modal-asset-id').innerText = scannedAsset;
+        document.getElementById('report-modal').style.display = 'flex';
+        
+        const isBD = currentAction === 'Breakdown';
+        document.getElementById('modal-title').innerText = isBD ? "Report Breakdown" : "Log Service";
+        
+        const nameLabel = document.getElementById('label-name');
+        const nameInput = document.getElementById('input-name');
+        if (isBD) {
+            nameLabel.innerText = "Name and CPF No *";
+            nameInput.placeholder = "e.g., Raghu (123456)";
+        } else {
+            nameLabel.innerText = "Technician Name *";
+            nameInput.placeholder = "e.g., Vendor Tech Name";
+        }
+
+        document.getElementById('section-breakdown').style.display = isBD ? 'block' : 'none';
+        document.getElementById('section-tech').style.display = isBD ? 'none' : 'block';
+      }
+
+      function showSuccessUI(ticketId, type) {
+        document.getElementById('report-modal').style.display = 'none';
+        const successOverlay = document.getElementById('success-overlay');
+        
+        document.getElementById('success-title').innerText = (type === 'Breakdown') ? "Fault Reported" : "Service Logged";
+        if (ticketId && ticketId !== "N/A" && ticketId !== "Logged Successfully") {
+            document.getElementById('ticket-display').style.display = 'block';
+            document.getElementById('generated-ticket-id').innerText = ticketId;
+        } else {
+            document.getElementById('ticket-display').style.display = 'none';
+        }
+        
+        successOverlay.style.display = 'flex';
+        setTimeout(() => { location.reload(); }, 3500);
+      }
+
+      function closeModal() { document.getElementById('report-modal').style.display = 'none'; }
+      function closePin() { document.getElementById('pin-overlay').style.display = 'none'; document.getElementById('pinInput').value = ""; document.getElementById('pin-msg').innerText = ""; }
+      function showHistory() { document.getElementById('history-overlay').style.display = 'flex'; }
+
+      // ==========================================
+      // OFFLINE ENGINE & SUBMISSION
+      // ==========================================
+      window.addEventListener('online', updateNetworkStatus);
+      window.addEventListener('offline', updateNetworkStatus);
+
+      function updateNetworkStatus() {
+        const badge = document.getElementById('sync-badge');
+        const icon = document.getElementById('sync-icon');
+        const text = document.getElementById('sync-text');
+        let queue = JSON.parse(localStorage.getItem("ongc_offline_queue") || "[]");
+
+        if (navigator.onLine) {
+          if (queue.length > 0) { checkAndSyncOfflineData(); } 
+          else { badge.style.display = 'none'; }
+        } else {
+          badge.style.display = 'flex'; badge.className = 'sync-badge';
+          icon.innerText = 'cloud_off'; icon.classList.remove('spin-icon');
+          text.innerText = queue.length > 0 ? `Offline (${queue.length} Pending)` : 'Offline Mode';
+        }
+      }
+
+      async function submitToDatabase() {
+        const btn = document.getElementById('submit-btn');
+        const name = document.getElementById('input-name').value;
+        const desc = document.getElementById('modal-desc').value;
+
+        if (!name || !desc) return alert("Please fill all mandatory fields");
+
+        let extra = ""; let status = (currentAction === 'Breakdown') ? "OPEN" : "CLOSED";
+
+        if (currentAction === 'Breakdown') {
+          let cats = []; document.querySelectorAll('input[name="prob-cat"]:checked').forEach(c => cats.push(c.value));
+          extra = "Category: " + (cats.join(", ") || "General Issue");
+        } else {
+          extra = "Job: " + (document.querySelector('input[name="job-type"]:checked')?.value || "Service");
+          if (document.querySelector('input[name="job-status"]:checked')?.value.includes("Pending")) status = "PENDING";
+        }
+
+        const payload = { tag: scannedAsset, type: currentAction, userName: name, category: extra, description: desc, status: status };
+        btn.innerText = "Processing..."; btn.disabled = true;
+
+        if (!navigator.onLine) {
+          saveToOfflineQueue(payload, "Saved to device.");
+          return;
+        }
+
+        try {
+          const response = await apiCall("handleInAppSubmission", { payload: payload });
+          if (response.success) { showSuccessUI(response.ticket, payload.type); } 
+          else { alert("Error: " + response.error); btn.innerText = "SUBMIT"; btn.disabled = false; }
+        } catch (error) {
+          saveToOfflineQueue(payload, "Connection timed out. Saved locally.");
+        }
+      }
+
+      function saveToOfflineQueue(data, msg) {
+        let queue = JSON.parse(localStorage.getItem("ongc_offline_queue") || "[]");
+        data.offlineSavedAt = new Date().toLocaleString();
+        queue.push(data);
+        localStorage.setItem("ongc_offline_queue", JSON.stringify(queue));
+        
+        document.getElementById('report-modal').style.display = 'none';
+        alert("⚠️ " + msg + "\n\nYour log for " + data.tag + " will sync automatically when you get signal.");
+        updateNetworkStatus(); 
+        setTimeout(() => { location.reload(); }, 500);
+      }
+
+      async function checkAndSyncOfflineData() {
+        if (!navigator.onLine) return;
+
+        let queue = JSON.parse(localStorage.getItem("ongc_offline_queue") || "[]");
+        if (queue.length === 0) return;
+
+        const badge = document.getElementById('sync-badge');
+        badge.style.display = 'flex'; badge.className = 'sync-badge syncing'; 
+        document.getElementById('sync-icon').innerText = 'sync';
+        document.getElementById('sync-icon').classList.add('spin-icon');
+        document.getElementById('sync-text').innerText = `Syncing ${queue.length} logs...`;
+
+        let itemsProcessed = 0; let failedItems = [];
+
+        for (const item of queue) {
+          try {
+            const res = await apiCall("handleInAppSubmission", { payload: item });
+            if (!res.success) failedItems.push(item);
+          } catch (e) { failedItems.push(item); }
+          itemsProcessed++;
+        }
+        checkSyncCompletion(itemsProcessed, queue.length, failedItems);
+      }
+
+      function checkSyncCompletion(processed, total, failedItems) {
+        if (processed === total) {
+          if (failedItems.length === 0) {
+            localStorage.removeItem("ongc_offline_queue");
+            const badge = document.getElementById('sync-badge');
+            badge.className = 'sync-badge online-mode'; 
+            document.getElementById('sync-icon').classList.remove('spin-icon');
+            document.getElementById('sync-icon').innerText = 'check_circle';
+            document.getElementById('sync-text').innerText = 'Sync Complete';
+            setTimeout(() => { badge.style.display = 'none'; location.reload(); }, 3000);
+          } else {
+            localStorage.setItem("ongc_offline_queue", JSON.stringify(failedItems));
+            updateNetworkStatus();
+          }
+        }
+      }
+
+      // ==========================================
+      // ADMIN & ANALYTICS
+      // ==========================================
+      function switchAdminTab(tabName) {
+        document.getElementById('tab-btn-tickets').classList.remove('active'); document.getElementById('tab-btn-analytics').classList.remove('active');
+        document.getElementById('tab-btn-' + tabName).classList.add('active');
+        document.getElementById('admin-tab-tickets').style.display = 'none'; document.getElementById('admin-tab-analytics').style.display = 'none';
+        document.getElementById('admin-tab-' + tabName).style.display = 'block';
+        if (tabName === 'analytics') loadAnalytics();
+      }
+
+      async function loadAdminDashboard() {
+        document.getElementById('admin-overlay').style.display = 'flex'; switchAdminTab('tickets');
+        const list = document.getElementById('open-tickets-list');
+        list.innerHTML = '<div style="text-align:center; padding: 20px;"><span class="material-symbols-outlined spin">sync</span> Fetching Data...</div>';
+        
+        try {
+          const tickets = await apiCall("getOpenTickets");
+          document.getElementById('open-count').innerText = tickets.length;
+          if(tickets.length === 0) { list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--primary-green);"><span class="material-symbols-outlined" style="font-size:36px;">check_circle</span><br><br><strong>All Clear!</strong></div>'; return; }
+          let html = '';
+          tickets.forEach(t => { html += `<div class="ticket-card"><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><strong style="color:var(--primary-blue); font-size:14px;">${t.tag}</strong><span style="font-size:11px; color:var(--text-muted);">${t.date}</span></div><div style="font-size:10px; color:var(--text-muted); margin-bottom:6px;">TICKET: ${t.ticket}</div><div style="font-size:13px; margin-bottom:2px;"><strong>${t.category}</strong></div><div style="font-size:12px; color:#444;"><em>"${t.desc}"</em></div><div style="font-size:10px; color:var(--primary-red); margin-top:6px; font-weight:bold;">BY: ${t.reportedBy}</div></div>`; });
+          list.innerHTML = html;
+        } catch (e) { list.innerHTML = '<div style="color:red; text-align:center; padding:20px;">Failed to load data.</div>'; }
+      }
+
+      async function loadAnalytics() {
+        document.getElementById('analytics-loader').style.display = 'block'; document.getElementById('analytics-content').style.display = 'none';
+        try {
+          const stats = await apiCall("getDashboardStats");
+          document.getElementById('analytics-loader').style.display = 'none'; document.getElementById('analytics-content').style.display = 'block'; document.getElementById('stat-total-ac').innerText = stats.total;
+          if (chartAreaInstance) chartAreaInstance.destroy(); if (chartMakeInstance) chartMakeInstance.destroy(); if (chartInstInstance) chartInstInstance.destroy();
+          const colors = ['#1976d2', '#d32f2f', '#388e3c', '#f57c00', '#7b1fa2', '#0097a7', '#0288d1', '#fbc02d'];
+          chartAreaInstance = new Chart(document.getElementById('chartArea'), { type: 'doughnut', data: { labels: Object.keys(stats.byArea), datasets: [{ data: Object.values(stats.byArea), backgroundColor: colors }] }, options: { responsive: true, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: {size: 10} } } } } });
+          chartMakeInstance = new Chart(document.getElementById('chartMake'), { type: 'pie', data: { labels: Object.keys(stats.byMake), datasets: [{ data: Object.values(stats.byMake), backgroundColor: colors }] }, options: { responsive: true, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: {size: 10} } } } } });
+          chartInstInstance = new Chart(document.getElementById('chartInst'), { type: 'bar', data: { labels: Object.keys(stats.byInst), datasets: [{ label: 'Units', data: Object.values(stats.byInst), backgroundColor: '#1976d2', borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { font: {size: 10}, maxRotation: 45, minRotation: 45 } } } } });
+        } catch(e) { console.error("Analytics load failed"); }
+      }
+
+      async function sendChatMessage() {
+        const input = document.getElementById('chat-input'); 
+        const userQ = input.value; 
+        if(!userQ) return;
+        
+        const history = document.getElementById('chat-history'); 
+        history.innerHTML += `<div class="chat-bubble chat-user">${userQ}</div>`; 
+        input.value = ""; 
+        history.scrollTop = history.scrollHeight;
+        
+        const typingId = "msg-" + Date.now();
+        history.innerHTML += `<div id="${typingId}" class="chat-bubble chat-ai" style="opacity:0.6;">Thinking...</div>`;
+        history.scrollTop = history.scrollHeight;
+        
+        try {
+          const ans = await apiCall("processUserChat", { question: userQ, chatHistory: myChatMemory });
+          document.getElementById(typingId).remove();
+          history.innerHTML += `<div class="chat-bubble chat-ai">${ans}</div>`; 
+          history.scrollTop = history.scrollHeight; 
+          myChatMemory += `\nU: ${userQ}\nA: ${ans}`; 
+        } catch (error) {
+          document.getElementById(typingId).remove();
+          history.innerHTML += `<div class="chat-bubble chat-ai" style="color:red;">⚠️ Network/Server Error: Could not reach the AI.</div>`;
+          history.scrollTop = history.scrollHeight;
+        }
+      }
+    </script>
+  </body>
+</html>
