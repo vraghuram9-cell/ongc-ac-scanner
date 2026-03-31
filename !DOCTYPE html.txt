@@ -236,7 +236,7 @@
 
     <script>
       // 1. PASTE YOUR NEW GOOGLE APPS SCRIPT WEB APP URL HERE
-      const API_URL = "YOUR_NEW_GAS_WEB_APP_URL_HERE"; 
+      const API_URL = "https://script.google.com/macros/s/AKfycbyiXtKcSbqvnaUPKOk-zsAqsXQbpnzpzTMPRUirhE6NGspZDc0CQWymLntG-R7qwuBo/exec"; 
 
       // 2. Safely grab URL parameters (Works natively in standard browsers)
       const urlParams = new URLSearchParams(window.location.search);
