@@ -1,8 +1,9 @@
-<index html>
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <base target="_top">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ONGC AC PORTAL</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,14 +14,14 @@
 
     <style>
       :root { --primary-red: #d32f2f; --primary-blue: #1976d2; --primary-green: #2e7d32; --bg-color: #f4f7f9; --card-bg: #ffffff; --text-main: #202124; --text-muted: #5f6368; --border-color: #e0e0e0; }
-      html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-      body { display: flex; flex-direction: column; align-items: center; min-height: 100dvh; padding-top: 70px; box-sizing: border-box; overflow-x: hidden; }
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
+      body { display: flex; flex-direction: column; align-items: center; min-height: 100dvh; padding-top: 74px; box-sizing: border-box; overflow-x: hidden; }
       
-      .header { background: linear-gradient(135deg, var(--primary-red), #e53935); color: white; width: 100%; height: 64px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; position: fixed; top: 0; left: 0; z-index: 100; box-shadow: 0 4px 12px rgba(211,47,47,0.2); letter-spacing: 0.5px;}
+      .header { background: linear-gradient(135deg, var(--primary-red), #e53935); color: white; width: 100%; height: 64px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; position: fixed; top: 0; left: 0; z-index: 100; box-shadow: 0 4px 12px rgba(211,47,47,0.2); letter-spacing: 0.5px; padding-top: env(safe-area-inset-top); }
       .admin-icon { position: absolute; right: 18px; cursor: pointer; color: rgba(255,255,255,0.9); transition: 0.2s; font-size: 26px; }
       .admin-icon:hover { color: white; transform: scale(1.1); }
       
-      .container { background: var(--card-bg); padding: 24px 20px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04); width: 92%; max-width: 440px; text-align: center; box-sizing: border-box; margin-top: 16px; display: flex; flex-direction: column; transition: all 0.3s ease; }
+      .container { background: var(--card-bg); padding: 24px 20px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04); width: 92%; max-width: 440px; text-align: center; box-sizing: border-box; margin-top: 8px; display: flex; flex-direction: column; transition: all 0.3s ease; }
       .asset-id { font-size: 34px; font-weight: 800; color: var(--text-main); margin: 0 0 12px 0; letter-spacing: -0.5px; }
       .status-banner { padding: 12px; border-radius: 10px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.03);}
       
@@ -33,9 +34,11 @@
       .btn-blue { background: linear-gradient(135deg, #1976d2, #1565c0); } .btn-red { background: linear-gradient(135deg, #d32f2f, #c62828); } .btn-green { background: linear-gradient(135deg, #2e7d32, #1b5e20); } .btn-dark { background: #202124; }
       .btn-text { background: none; border: none; color: var(--primary-blue); font-weight: 700; cursor: pointer; margin-top: 12px; font-size: 14px; padding: 10px; box-shadow: none; } .btn-disabled { background: #e0e0e0 !important; color: #9e9e9e !important; cursor: not-allowed !important; pointer-events: none; box-shadow: none !important; }
       
-      .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-      .modal-box { background: white; padding: 24px; border-radius: 24px; width: 100%; max-width: 440px; box-shadow: 0 24px 48px rgba(0,0,0,0.2); box-sizing: border-box; max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; }
-      input[type="text"], input[type="password"], textarea, select { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border-color); border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 15px; margin-top: 6px; transition: all 0.2s; background: #fafafa; } 
+      .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+      .modal-box { background: white; padding: 24px; border-radius: 24px; width: 100%; max-width: 440px; box-shadow: 0 24px 48px rgba(0,0,0,0.2); box-sizing: border-box; max-height: 85dvh; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; }
+      
+      /* Font size 16px is REQUIRED on inputs to prevent iOS auto-zoom bug */
+      input[type="text"], input[type="password"], textarea, select { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border-color); border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; margin-top: 6px; transition: all 0.2s; background: #fafafa; } 
       input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-blue); background: white; box-shadow: 0 0 0 3px rgba(25,118,210,0.1); }
       
       .history-list { background: #fafafa; border: 1px solid var(--border-color); border-radius: 12px; padding: 0; margin-bottom: 20px; overflow: hidden; } .h-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #eaeaea; } .h-row:last-child { border-bottom: none; }
@@ -46,13 +49,18 @@
       .ticket-card { background: #fff; border: 1px solid var(--border-color); border-left: 5px solid var(--primary-red); border-radius: 10px; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);} .chart-container { background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); } .chart-title { font-size: 13px; text-transform: uppercase; font-weight: 800; color: var(--text-muted); margin-bottom: 16px; text-align: center; letter-spacing: 0.8px;}
       .stat-hero { background: linear-gradient(135deg, #1976d2, #1565c0); color: white; border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(25,118,210,0.2); } .stat-hero-num { font-size: 42px; font-weight: 800; margin: 0; line-height: 1; } .stat-hero-lbl { font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; opacity: 0.9; margin-top: 6px; }
       
-      .chat-box { background: #f0f2f5; width: 100%; max-width: 440px; display: flex; flex-direction: column; height: 85vh; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.15);} #chat-history { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; } .chat-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.45; } .chat-user { background: var(--primary-blue); color: white; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 2px 6px rgba(25,118,210,0.2); } .chat-ai { background: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+      .chat-box { background: #f0f2f5; width: 100%; max-width: 440px; display: flex; flex-direction: column; height: 80dvh; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.15);} #chat-history { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; } .chat-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.45; } .chat-user { background: var(--primary-blue); color: white; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 2px 6px rgba(25,118,210,0.2); } .chat-ai { background: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
       
       #loading-overlay { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px 0; } .spinner { border: 4px solid rgba(0, 0, 0, 0.08); width: 36px; height: 36px; border-radius: 50%; border-left-color: var(--primary-blue); animation: spin 0.8s linear infinite; margin-bottom: 16px; } @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } .success-icon { font-size: 72px; color: var(--primary-green); margin-bottom: 12px; }
       .footer { margin-top: auto; padding: 24px 16px; font-size: 11px; color: #9aa0a6; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; text-align: center; width: 100%; box-sizing: border-box; }
       
       .sync-badge { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #f57c00; color: white; padding: 12px 20px; border-radius: 30px; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; box-shadow: 0 6px 16px rgba(245,124,0,0.3); z-index: 1000; transition: background-color 0.3s; cursor: pointer;}
       .sync-badge.online-mode { background: #2e7d32; display: none; } .sync-badge.syncing { background: #1976d2; } .spin-icon { animation: spin 1s linear infinite; }
+
+      /* Mobile Scanner Overrides */
+      #reader { width: 100%; }
+      #reader img { max-width: 100%; }
+      #reader__scan_region { max-height: 250px; overflow: hidden; border-radius: 10px;}
     </style>
   </head>
   
@@ -65,9 +73,8 @@
     <div id="scan-step" class="container">
       <h3 style="margin: 0 0 16px 0; font-size: 18px;">Identify Asset</h3>
       <input list="ac-list" id="ac-selector" placeholder="Type TAG ID (e.g. AC001)" onchange="if(this.value) processAsset(this.value)">
-      <datalist id="ac-list">
-        </datalist>
-      <div id="reader" style="border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); margin-top: 12px;"></div>
+      <datalist id="ac-list"></datalist>
+      <div id="reader" style="border-radius: 12px; overflow: hidden; border: 1.5px solid var(--border-color); margin-top: 16px;"></div>
     </div>
 
     <div id="action-step" class="container" style="display:none;">
@@ -154,80 +161,80 @@
 
       <div id="section-breakdown" style="display:none; text-align:left; margin-bottom:12px;">
         <label class="i-lbl">Problem Category *</label>
-        <div style="background:#fafafa; padding:12px; border-radius:10px; margin-top:4px; font-size:13px; line-height:2.2; border: 1px solid var(--border-color);">
-          <label><input type="checkbox" name="prob-cat" value="Not Cooling"> Not Cooling</label><br>
-          <label><input type="checkbox" name="prob-cat" value="Low Cooling"> Low Cooling</label><br>
-          <label><input type="checkbox" name="prob-cat" value="Compressor Issue"> Compressor Not Starting</label><br>
-          <label><input type="checkbox" name="prob-cat" value="Water Leakage"> Water Leakage</label><br>
-          <label><input type="checkbox" name="prob-cat" value="Electrical Fault"> Electrical Fault</label>
+        <div style="background:#fafafa; padding:12px; border-radius:12px; margin-top:4px; font-size:14px; line-height:2.4; border: 1px solid var(--border-color);">
+          <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" style="width:18px; height:18px; margin:0;" name="prob-cat" value="Not Cooling"> Not Cooling</label>
+          <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" style="width:18px; height:18px; margin:0;" name="prob-cat" value="Low Cooling"> Low Cooling</label>
+          <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" style="width:18px; height:18px; margin:0;" name="prob-cat" value="Compressor Issue"> Compressor Not Starting</label>
+          <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" style="width:18px; height:18px; margin:0;" name="prob-cat" value="Water Leakage"> Water Leakage</label>
+          <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" style="width:18px; height:18px; margin:0;" name="prob-cat" value="Electrical Fault"> Electrical Fault</label>
         </div>
       </div>
 
       <div id="section-tech" style="display:none; text-align:left; margin-bottom:12px;">
         <label class="i-lbl">Job Type *</label>
-        <div style="margin:4px 0 12px 0; font-size:13px; background:#fafafa; padding:10px 12px; border-radius:10px; border: 1px solid var(--border-color);">
-          <label><input type="radio" name="job-type" value="Breakdown Repair"> Breakdown Repair</label><br>
-          <label style="display:block; margin-top:8px;"><input type="radio" name="job-type" value="Preventive Maintenance"> Preventive Maintenance</label>
+        <div style="margin:4px 0 12px 0; font-size:14px; background:#fafafa; padding:12px; border-radius:12px; border: 1px solid var(--border-color);">
+          <label style="display:flex; align-items:center; gap:8px;"><input type="radio" style="width:18px; height:18px; margin:0;" name="job-type" value="Breakdown Repair"> Breakdown Repair</label>
+          <label style="display:flex; align-items:center; gap:8px; margin-top:10px;"><input type="radio" style="width:18px; height:18px; margin:0;" name="job-type" value="Preventive Maintenance"> Preventive Maintenance</label>
         </div>
         <label class="i-lbl">Current Status *</label>
-        <div style="margin:4px 0 0 0; font-size:13px; background:#fafafa; padding:10px 12px; border-radius:10px; border: 1px solid var(--border-color);">
-          <label><input type="radio" name="job-status" value="Closed/Working Normally"> Closed/Working Normally</label><br>
-          <label style="display:block; margin-top:8px;"><input type="radio" name="job-status" value="Pending"> Pending</label>
+        <div style="margin:4px 0 0 0; font-size:14px; background:#fafafa; padding:12px; border-radius:12px; border: 1px solid var(--border-color);">
+          <label style="display:flex; align-items:center; gap:8px;"><input type="radio" style="width:18px; height:18px; margin:0;" name="job-status" value="Closed/Working Normally"> Closed/Working Normally</label>
+          <label style="display:flex; align-items:center; gap:8px; margin-top:10px;"><input type="radio" style="width:18px; height:18px; margin:0;" name="job-status" value="Pending"> Pending</label>
         </div>
       </div>
 
       <div style="margin-bottom:16px; text-align:left;">
         <label class="i-lbl" id="label-desc">Description *</label>
-        <textarea id="modal-desc" placeholder="Details..." rows="2"></textarea>
+        <textarea id="modal-desc" placeholder="Details..." rows="3"></textarea>
       </div>
 
       <button class="btn btn-blue" id="submit-btn" onclick="submitToDatabase()">SUBMIT</button>
       <button onclick="closeModal()" class="btn-text" style="width:100%;">Cancel</button>
     </div></div>
 
-    <div id="success-overlay" class="overlay"><div class="modal-box" style="text-align:center; padding: 30px 20px;">
+    <div id="success-overlay" class="overlay"><div class="modal-box" style="text-align:center; padding: 40px 20px;">
       <span class="material-symbols-outlined success-icon">task_alt</span>
       <h2 id="success-title" style="margin: 0 0 8px 0; color: #202124; font-size: 20px;">Record Updated</h2>
-      <p id="success-desc" style="color: #5f6368; margin: 0 0 20px 0; font-size: 13px;">System has successfully logged your entry.</p>
+      <p id="success-desc" style="color: #5f6368; margin: 0 0 20px 0; font-size: 14px;">System has successfully logged your entry.</p>
       
-      <div id="ticket-display" style="display:none; background:#f4fbf5; padding:12px; border-radius:10px; border:1px solid #c8e6c9; margin-bottom:20px;">
-        <div style="font-size:10px; color:var(--primary-green); font-weight:700; text-transform:uppercase;">Fault Ticket Generated</div>
-        <div id="generated-ticket-id" style="font-size:20px; font-weight:800; color:#202124; margin-top:4px; letter-spacing:0.5px;"></div>
+      <div id="ticket-display" style="display:none; background:#f4fbf5; padding:16px; border-radius:12px; border:1px solid #c8e6c9; margin-bottom:24px;">
+        <div style="font-size:11px; color:var(--primary-green); font-weight:700; text-transform:uppercase;">Fault Ticket Generated</div>
+        <div id="generated-ticket-id" style="font-size:22px; font-weight:800; color:#202124; margin-top:6px; letter-spacing:0.5px;"></div>
       </div>
-      <div class="spinner" style="border-width: 2px; margin: 0 auto;"></div>
+      <div class="spinner" style="border-width: 3px; margin: 0 auto;"></div>
     </div></div>
 
-    <div id="pin-overlay" class="overlay"><div class="modal-box" style="text-align:center;">
-      <span class="material-symbols-outlined" style="font-size: 42px; color: var(--primary-blue); margin-bottom: 8px;">lock</span>
-      <h3 style="margin-top:0; font-size: 18px;">Security Check</h3>
-      <input type="password" id="pinInput" placeholder="••••" maxlength="4" style="font-size:24px; text-align:center; letter-spacing:12px; padding: 10px;">
-      <button class="btn btn-blue" style="margin-top:16px;" onclick="verifyAndSubmit()">AUTHORIZE</button>
-      <button onclick="closePin()" class="btn-text" style="padding: 4px; margin-top: 8px;">Cancel</button>
-      <div id="pin-msg" style="color:red; margin-top:8px; font-size: 13px; font-weight:600;"></div>
+    <div id="pin-overlay" class="overlay"><div class="modal-box" style="text-align:center; padding-top: 40px;">
+      <span class="material-symbols-outlined" style="font-size: 48px; color: var(--primary-blue); margin-bottom: 12px;">lock</span>
+      <h3 style="margin-top:0; font-size: 20px;">Security Check</h3>
+      <input type="password" id="pinInput" placeholder="••••" maxlength="4" pattern="[0-9]*" inputmode="numeric" style="font-size:32px; text-align:center; letter-spacing:16px; padding: 16px; margin-bottom: 16px;">
+      <button class="btn btn-blue" onclick="verifyAndSubmit()">AUTHORIZE</button>
+      <button onclick="closePin()" class="btn-text" style="padding: 10px; margin-top: 8px;">Cancel</button>
+      <div id="pin-msg" style="color:var(--primary-red); margin-top:12px; font-size: 14px; font-weight:600;"></div>
     </div></div>
 
     <div id="history-overlay" class="overlay"><div class="modal-box">
-      <h3 style="text-align:center; color: var(--primary-blue); display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 0 16px 0; font-size: 18px;">
+      <h3 style="text-align:center; color: var(--primary-blue); display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 20px 0; font-size: 20px;">
         <span class="material-symbols-outlined">history</span> Service History
       </h3>
       <div class="history-list">
-        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:16px;">build_circle</span> Last PM</p><p class="h-date text-green" id="hist-last-pm">-</p></div>
-        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:16px;">event_upcoming</span> Next Due</p><p class="h-date text-orange" id="hist-next-pm">-</p></div>
-        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:16px;">warning</span> Breakdown</p><p class="h-date text-red" id="hist-bd">-</p></div>
+        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:18px;">build_circle</span> Last PM</p><p class="h-date text-green" id="hist-last-pm">-</p></div>
+        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:18px;">event_upcoming</span> Next Due</p><p class="h-date text-orange" id="hist-next-pm">-</p></div>
+        <div class="h-row"><p class="h-label"><span class="material-symbols-outlined" style="font-size:18px;">warning</span> Breakdown</p><p class="h-date text-red" id="hist-bd">-</p></div>
       </div>
       <button class="btn btn-blue" onclick="document.getElementById('history-overlay').style.display='none'">CLOSE</button>
     </div></div>
 
     <div id="ai-chat-overlay" class="overlay">
       <div class="chat-box">
-        <div style="background:white; padding:14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee;">
-          <strong style="display:flex; align-items:center; gap:6px; font-size: 14px;"><span class="material-symbols-outlined" style="color:var(--primary-blue); font-size:18px;">smart_toy</span> Database AI</strong>
-          <span style="cursor:pointer;" onclick="document.getElementById('ai-chat-overlay').style.display='none'">✖</span>
+        <div style="background:white; padding:16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee;">
+          <strong style="display:flex; align-items:center; gap:8px; font-size: 16px;"><span class="material-symbols-outlined" style="color:var(--primary-blue); font-size:20px;">smart_toy</span> Database AI</strong>
+          <span style="cursor:pointer; padding: 4px;" onclick="document.getElementById('ai-chat-overlay').style.display='none'">✖</span>
         </div>
         <div id="chat-history"></div>
-        <div style="background:white; padding:12px; display:flex; gap:8px; border-top:1px solid #eee;">
-          <input type="text" id="chat-input" placeholder="Ask AI..." style="flex:1; margin:0; padding:10px;">
-          <button onclick="sendChatMessage()" style="border:none; background:var(--primary-blue); color:white; padding:0 14px; border-radius:8px; font-weight: 600;">Send</button>
+        <div style="background:white; padding:14px; display:flex; gap:10px; border-top:1px solid #eee; align-items: center;">
+          <input type="text" id="chat-input" placeholder="Ask AI..." style="flex:1; margin:0; padding:12px; border-radius: 10px;" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+          <button onclick="sendChatMessage()" style="border:none; background:var(--primary-blue); color:white; padding:12px 18px; border-radius:10px; font-weight: 700; font-size: 15px;">Send</button>
         </div>
       </div>
     </div>
@@ -238,10 +245,10 @@
     </div>
 
     <script>
-      // 1. PASTE YOUR NEW GOOGLE APPS SCRIPT WEB APP URL HERE
+      // 1. YOUR GOOGLE APPS SCRIPT WEB APP URL
       const API_URL = "https://script.google.com/macros/s/AKfycbyiXtKcSbqvnaUPKOk-zsAqsXQbpnzpzTMPRUirhE6NGspZDc0CQWymLntG-R7qwuBo/exec"; 
 
-      // 2. Safely grab URL parameters (Works natively in standard browsers)
+      // 2. Safely grab URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       let scannedAsset = urlParams.get('id') || ""; 
       let directAdmin = urlParams.get('admin') || "false"; 
@@ -250,7 +257,7 @@
       let chartAreaInstance = null; let chartMakeInstance = null; let chartInstInstance = null;
 
       // ==========================================
-      // 🚀 THE NEW API BRIDGE (Replaces google.script.run)
+      // 🚀 API BRIDGE
       // ==========================================
       async function apiCall(action, data = {}) {
         try {
@@ -277,7 +284,10 @@
         } else if (directAdmin === "true") {
           loadAdminDashboard();
         } else {
-          scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+          // Responsive QR scanner size for mobile
+          const screenWidth = window.innerWidth;
+          const qrSize = screenWidth < 400 ? 200 : 250; 
+          scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: qrSize, height: qrSize } });
           scanner.render(onScanSuccess);
         }
       };
@@ -356,11 +366,11 @@
 
           if (data.hasOpenComplaint) {
             banner.style.flexDirection = 'column'; banner.style.color = 'var(--primary-red)'; banner.style.backgroundColor = '#fff3f3'; banner.style.border = '1px solid #ffcdd2';
-            banner.innerHTML = `<div style="display:flex; align-items:center; gap:6px;"><span class="material-symbols-outlined" style="font-size:18px;">warning</span><span style="letter-spacing: 0.5px;">FAULTY (OPEN TICKET)</span></div><div style="font-size:11px; font-weight:600; opacity:0.8; margin-top:4px;">${data.openTicketId} | ${data.openTicketDate}</div>`;
+            banner.innerHTML = `<div style="display:flex; align-items:center; gap:6px;"><span class="material-symbols-outlined" style="font-size:20px;">warning</span><span style="letter-spacing: 0.5px;">FAULTY (OPEN TICKET)</span></div><div style="font-size:12px; font-weight:600; opacity:0.8; margin-top:4px;">${data.openTicketId} | ${data.openTicketDate}</div>`;
             bdBtn.classList.add('btn-disabled'); bdBtn.innerHTML = '<span class="material-symbols-outlined">block</span> ALREADY REPORTED';
           } else {
             banner.style.flexDirection = 'row'; banner.style.color = 'var(--primary-green)'; banner.style.backgroundColor = '#f4fbf5'; banner.style.border = '1px solid #c8e6c9';
-            banner.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px;">check_circle</span> <span style="letter-spacing: 0.5px;">HEALTHY</span>';
+            banner.innerHTML = '<span class="material-symbols-outlined" style="font-size:20px;">check_circle</span> <span style="letter-spacing: 0.5px;">HEALTHY</span>';
             bdBtn.classList.remove('btn-disabled'); bdBtn.innerHTML = '<span class="material-symbols-outlined">warning</span> REPORT FAULT';
           }
         } else { alert("Asset Tag not recognized!"); location.reload(); }
@@ -561,7 +571,7 @@
           document.getElementById('open-count').innerText = tickets.length;
           if(tickets.length === 0) { list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--primary-green);"><span class="material-symbols-outlined" style="font-size:36px;">check_circle</span><br><br><strong>All Clear!</strong></div>'; return; }
           let html = '';
-          tickets.forEach(t => { html += `<div class="ticket-card"><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><strong style="color:var(--primary-blue); font-size:14px;">${t.tag}</strong><span style="font-size:11px; color:var(--text-muted);">${t.date}</span></div><div style="font-size:10px; color:var(--text-muted); margin-bottom:6px;">TICKET: ${t.ticket}</div><div style="font-size:13px; margin-bottom:2px;"><strong>${t.category}</strong></div><div style="font-size:12px; color:#444;"><em>"${t.desc}"</em></div><div style="font-size:10px; color:var(--primary-red); margin-top:6px; font-weight:bold;">BY: ${t.reportedBy}</div></div>`; });
+          tickets.forEach(t => { html += `<div class="ticket-card"><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><strong style="color:var(--primary-blue); font-size:15px;">${t.tag}</strong><span style="font-size:12px; color:var(--text-muted);">${t.date}</span></div><div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">TICKET: ${t.ticket}</div><div style="font-size:14px; margin-bottom:4px;"><strong>${t.category}</strong></div><div style="font-size:13px; color:#444;"><em>"${t.desc}"</em></div><div style="font-size:11px; color:var(--primary-red); margin-top:8px; font-weight:bold;">BY: ${t.reportedBy}</div></div>`; });
           list.innerHTML = html;
         } catch (e) { list.innerHTML = '<div style="color:red; text-align:center; padding:20px;">Failed to load data.</div>'; }
       }
@@ -573,9 +583,9 @@
           document.getElementById('analytics-loader').style.display = 'none'; document.getElementById('analytics-content').style.display = 'block'; document.getElementById('stat-total-ac').innerText = stats.total;
           if (chartAreaInstance) chartAreaInstance.destroy(); if (chartMakeInstance) chartMakeInstance.destroy(); if (chartInstInstance) chartInstInstance.destroy();
           const colors = ['#1976d2', '#d32f2f', '#388e3c', '#f57c00', '#7b1fa2', '#0097a7', '#0288d1', '#fbc02d'];
-          chartAreaInstance = new Chart(document.getElementById('chartArea'), { type: 'doughnut', data: { labels: Object.keys(stats.byArea), datasets: [{ data: Object.values(stats.byArea), backgroundColor: colors }] }, options: { responsive: true, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: {size: 10} } } } } });
-          chartMakeInstance = new Chart(document.getElementById('chartMake'), { type: 'pie', data: { labels: Object.keys(stats.byMake), datasets: [{ data: Object.values(stats.byMake), backgroundColor: colors }] }, options: { responsive: true, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: {size: 10} } } } } });
-          chartInstInstance = new Chart(document.getElementById('chartInst'), { type: 'bar', data: { labels: Object.keys(stats.byInst), datasets: [{ label: 'Units', data: Object.values(stats.byInst), backgroundColor: '#1976d2', borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { font: {size: 10}, maxRotation: 45, minRotation: 45 } } } } });
+          chartAreaInstance = new Chart(document.getElementById('chartArea'), { type: 'doughnut', data: { labels: Object.keys(stats.byArea), datasets: [{ data: Object.values(stats.byArea), backgroundColor: colors }] }, options: { responsive: true, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: {size: 11} } } } } });
+          chartMakeInstance = new Chart(document.getElementById('chartMake'), { type: 'pie', data: { labels: Object.keys(stats.byMake), datasets: [{ data: Object.values(stats.byMake), backgroundColor: colors }] }, options: { responsive: true, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: {size: 11} } } } } });
+          chartInstInstance = new Chart(document.getElementById('chartInst'), { type: 'bar', data: { labels: Object.keys(stats.byInst), datasets: [{ label: 'Units', data: Object.values(stats.byInst), backgroundColor: '#1976d2', borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { ticks: { font: {size: 11}, maxRotation: 45, minRotation: 45 } } } } });
         } catch(e) { console.error("Analytics load failed"); }
       }
 
