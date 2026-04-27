@@ -94,6 +94,15 @@
             <div><div class="i-lbl">Make</div><div class="i-val" id="val-make">-</div></div>
             <div><div class="i-lbl">Capacity</div><div class="i-val" id="val-cap">-</div></div>
           </div>
+          
+          <div class="info-row grid-2">
+            <div><div class="i-lbl">I.D Serial</div><div class="i-val" id="val-id-serial">-</div></div>
+            <div><div class="i-lbl">Mfg Year</div><div class="i-val" id="val-mfg-year">-</div></div>
+          </div>
+          <div class="info-row">
+            <div class="i-lbl">O.D Serial</div><div class="i-val" id="val-od-serial">-</div>
+          </div>
+
           <div class="info-row">
             <div class="i-lbl">Area</div><div class="i-val" id="val-area">-</div>
           </div>
@@ -340,6 +349,10 @@
               make: cachedAsset.make, capacity: cachedAsset.capacity,
               area: cachedAsset.area, fullLoc: cachedAsset.fullLoc,
               lastPMDate: cachedAsset.lastPMDate, nextPMDate: cachedAsset.nextPMDate,
+              // 🆕 Fallback mapping for offline mode
+              idSerial: cachedAsset.idSerial || "N/A", 
+              odSerial: cachedAsset.odSerial || "N/A",
+              mfgYear: cachedAsset.mfgYear || "N/A",
               hasOpenComplaint: false, lastRepairDate: "Check online"
             });
           } else {
@@ -353,10 +366,16 @@
         document.getElementById('loading-overlay').style.display = 'none';
         if (data.found) {
           document.getElementById('asset-content').style.display = 'block';
+          
+          // 🆕 Added mapping for new serial numbers
           document.getElementById('val-make').innerText = data.make;
           document.getElementById('val-cap').innerText = data.capacity;
+          document.getElementById('val-id-serial').innerText = data.idSerial || "N/A";
+          document.getElementById('val-od-serial').innerText = data.odSerial || "N/A";
+          document.getElementById('val-mfg-year').innerText = data.mfgYear || "N/A";
           document.getElementById('val-area').innerText = data.area;
           document.getElementById('val-loc').innerText = data.fullLoc;
+          
           document.getElementById('hist-last-pm').innerText = data.lastPMDate;
           document.getElementById('hist-next-pm').innerText = data.nextPMDate;
           document.getElementById('hist-bd').innerText = data.lastRepairDate || "No Record";
